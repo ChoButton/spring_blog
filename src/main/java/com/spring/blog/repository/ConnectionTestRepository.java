@@ -9,3 +9,14 @@ public interface ConnectionTestRepository {
     String getNow();
 
 }
+
+/*
+  1. 블로그 포스팅 기능
+    닉네임, 제목, 본문, 글번호, 수정날짜, 조회수
+
+  2. 회원가입 기능
+    아이디, 비밀번호, 닉네임, 회원번호
+
+  3. 회원이름별로 블로그 포스팅 테이블을 가짐
+
+ */
