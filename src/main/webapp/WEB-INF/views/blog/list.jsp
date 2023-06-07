@@ -9,8 +9,32 @@
 </head>
 <body>
    <div class="container">
-        <h1>블로그 게시글 리스트</h1>
-        ${blogList}
-   </div>
+        <h1 class="text-center">블로그 게시글 리스트</h1>
+        <table class="table table-hover">
+         <thead>
+               <tr>
+                  <th>글번호</th>
+                  <th>글제목</th>
+                  <th>글쓴이</th>
+                  <th>작성일</th>
+                  <th>수정일</th>
+                  <th>조회수</th>
+               </tr>
+         </thead>
+         <tbody>
+            <c:forEach var="blog" items="${blogList}">
+               <tr>
+                  <th>${blog.blogId}</th>
+                  <td><a href="/blog/detail/${blog.blogId}">${blog.blogTitle}</a></td>
+                  <td>${blog.writer}</td>
+                  <td>${blog.publishedAt}</td>
+                  <td>${blog.updatedAt}</td>
+                  <td>${blog.blogCount}</td>
+               </tr>
+            </c:forEach>
+          </tbody>
+          <a href="/blog/insert" class="btn btn-primary">글쓰기</a>
+       </table><!--.table table-hover-->
+   </div><!--.container-->
 </body>
 </html>
