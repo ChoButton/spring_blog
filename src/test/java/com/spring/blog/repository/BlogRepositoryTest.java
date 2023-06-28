@@ -4,10 +4,12 @@ import com.spring.blog.entity.Blog;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
@@ -25,13 +27,14 @@ public class BlogRepositoryTest {
     BlogRepository blogRepository;
 
     // 해당 메서드는 테스트 전에 실행되어 테스트 전에 항상 동일한 데이터를 입력해주는 역할
-    @BeforeEach // 각 단위 테스트 전에 공통적으로 실행할 코드를 저장해두는 어노테이션
+    /*@BeforeEach // 각 단위 테스트 전에 공통적으로 실행할 코드를 저장해두는 어노테이션
     public void setBlogTable() {
         blogRepository.createBlogTable(); // blog 테이블 생성
         blogRepository.insertTestData(); // 생성된 blog 테이블에 더미데이터 3개 입력
-    }
+    }*/
 
     @Test
+    @Transactional
     @DisplayName("전체 행을 얻어오고, 그 중 자바 1번 인덱스 행만 추출해 번호 확인")
     public void findAllTest() {
         //given (사람기준) 2번 요소 조회를 위한 fixture 선언
@@ -47,6 +50,7 @@ public class BlogRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("2번 글을 조회했을때, 제목과 글쓴이와 번호가 단언대로 받아와지는지 확인")
     public void findByIdTest(){
         // given : 조회할 id를 변수로 저장합니다.
@@ -64,6 +68,7 @@ public class BlogRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("4번째 행 데이터 저장 후, 행 저장여부 및 전달데이터 저장 여부 확인")
     public void saveTest(){
         // given : 저장을 위한 Blog entity 생성 및 writer, blogTitle, blogContent
@@ -101,6 +106,7 @@ public class BlogRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("2번 삭제 후 전체 행수 2개, 삭제한 번호 조회시 null")
     public void deleteByIdTest(){
         //given : 삭제할 자료의 번호를 저장
@@ -116,6 +122,7 @@ public class BlogRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("2번글의 제목을 수정한 제목으로, 본문도 수정한 본문으로")
     public void updateTest(){
         // given
@@ -145,9 +152,19 @@ public class BlogRepositoryTest {
         assertEquals(blogId, blogRepository.findAll().get(1).getBlogId());
     }
 
-    @AfterEach // 각 단위 테스트 끝난 후에 실행항 구문을 저장하는 어노테이션
+    /*@AfterEach // 각 단위 테스트 끝난 후에 실행항 구문을 저장하는 어노테이션
     public void dropBlogTable() {
         blogRepository.dropBlogTable(); // blog 테이블 지우기
-    }
+    }*/
 
+    @Test
+    @Transactional
+    @DisplayName("블로그를 조회했을때 조회수가 1이 될것이다.")
+    public void viewsUpTest(){
+        long blogId = 1;
+
+        blogRepository.viewsUp(blogId);
+
+        assertThat(blogRepository.findById(blogId).getBlogCount()).isEqualTo(1);
+    }
 }

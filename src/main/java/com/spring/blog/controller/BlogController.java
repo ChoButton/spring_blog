@@ -76,7 +76,7 @@ public class BlogController {
         // /WEB_INF/views/blog-form.jsp
         return "blog/blog-form";
     }
-   @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public String insert(Blog blog){
         //서비스 객체를 이용해서 DB에 저장해 주시고
        blogService.save(blog);

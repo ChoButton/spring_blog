@@ -17,6 +17,4 @@ public interface BlogService {
     void save(Blog blog);
 
     void update(Blog blog);
-
-
 }

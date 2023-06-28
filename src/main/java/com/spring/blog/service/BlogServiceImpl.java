@@ -2,9 +2,11 @@ package com.spring.blog.service;
 
 import com.spring.blog.entity.Blog;
 import com.spring.blog.repository.BlogRepository;
+import com.spring.blog.repository.ReplyRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,10 +14,12 @@ import java.util.List;
 public class BlogServiceImpl implements BlogService{
 
     BlogRepository blogRepository;
+    ReplyRepository replyRepository;
 
     @Autowired // 생성자 주입이 속도가 빠름
-    public BlogServiceImpl(BlogRepository blogRepository){
+    public BlogServiceImpl(BlogRepository blogRepository, ReplyRepository replyRepository){
         this.blogRepository = blogRepository;
+        this.replyRepository = replyRepository;
     }
 
     @Override
@@ -25,11 +29,14 @@ public class BlogServiceImpl implements BlogService{
 
     @Override
     public Blog findById(long blogId){
+        blogRepository.viewsUp(blogId);
         return blogRepository.findById(blogId);
     }
 
+    @Transactional
     @Override
     public void deleteById(long blogId) {
+        replyRepository.deleteAllReplyByBlogId(blogId);
         blogRepository.deleteById(blogId);
     }
 
@@ -42,6 +49,5 @@ public class BlogServiceImpl implements BlogService{
     public void update(Blog blog) {
         blogRepository.update(blog);
     }
-
 
 }

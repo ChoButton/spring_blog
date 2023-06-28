@@ -87,4 +87,12 @@
             (null, '3번유저', '3번제목', '3번본문', now(), now(), null)
     </insert>
 
+    <update id="viewsUp" parameterType="long">
+        UPDATE
+            blog
+        SET
+            blog_count = blog_count + 1
+        WHERE
+            blog_id = #{blogId}
+    </update>
 </mapper>

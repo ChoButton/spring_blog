@@ -42,4 +42,6 @@ public interface BlogRepository {
     // JPA에서는 .save()를 통해 동일하게 쓰지만, 현재 코드에서 메서드 오버로딩도 불가능하고
     // 분리할 방법이 없으므로 메서드명을 다르게 사용합니다.
     void update(Blog blog);
+
+    void viewsUp(long blogId);
 }

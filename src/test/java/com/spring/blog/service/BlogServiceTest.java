@@ -1,6 +1,7 @@
 package com.spring.blog.service;
 
 import com.spring.blog.entity.Blog;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -66,7 +67,7 @@ public class BlogServiceTest {
                 .blogTitle(blogTitle)
                 .blogContent(blogContent)
                 .build();
-        int id = 3;
+        int id = 0;
 
         blogService.save(newBlog);
         List<Blog> blogList = blogService.findAll();
@@ -94,4 +95,8 @@ public class BlogServiceTest {
         assertEquals(blogTitle, blog.getBlogTitle());
         assertEquals(blogContent, blog.getBlogContent());
     }
+
+    // blog와 함께 reply가 삭제되는 케이스는 따로 다시 테스트코드를 하나 더 작성해주는게 좋습니다.
+
+
 }
