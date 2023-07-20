@@ -38,3 +38,4 @@ out/
 
 ### profiles ###
 application-db.yml
+application-jwt.yml

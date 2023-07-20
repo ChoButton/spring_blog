@@ -87,14 +87,16 @@
             </div>
         </table>
         <a href="/blog/list" class="btn btn-primary">목록으로 돌아가기</a>
-        <form action="/blog/delete" method="POST">
-            <input type="hidden" name="blogId" value="${blog.blogId}">
-            <input type="submit" class="btn btn-primary" value="삭제">
-        </form>
-        <form action="/blog/updateform" method="POST">
-            <input type="hidden" name="blogId" value="${blog.blogId}">
-            <input type="submit" class="btn btn-info" value="수정">
-        </form>
+        <c:if test="${username eq blog.writer}">
+            <form action="/blog/delete" method="POST">
+                <input type="hidden" name="blogId" value="${blog.blogId}">
+                <input type="submit" class="btn btn-primary" value="삭제">
+            </form>
+            <form action="/blog/updateform" method="POST">
+                <input type="hidden" name="blogId" value="${blog.blogId}">
+                <input type="submit" class="btn btn-info" value="수정">
+            </form>
+        </c:if>
 <!--reply 전체 목록 및 댓글쓰기 기능 구현-------------------------------------------------------------------------------------------->        
         <div class="row">
             <div id="replies">

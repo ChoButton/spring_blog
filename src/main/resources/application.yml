@@ -4,12 +4,23 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .jsp
   profiles:
-    active: db
+    active: db,jwt
   datasource:
     url: ${url}
     username: ${username_}
     password: ${password}
     driver-class-name: ${driver-class-name}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/**/**.xml
+
+jwt:
+  issuer: ${issuer}
+  secret_key: ${secret_key}

@@ -6,12 +6,16 @@ import com.spring.blog.exception.NotFoundBlogIdException;
 import com.spring.blog.service.BlogService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller // 컨트롤러 어노테이션은 1.빈 등록 2.url 매핑 처리 기능을 함께 가지고 있으므로 다른 어노테이션과
@@ -35,11 +39,28 @@ public class BlogController {
     // 3. .jsp 에서 볼 수 있도록 출력해 주세요
     // 헤당 파일의 이름은 blog/list.jsp 입니다.
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(Model model){
-        List<Blog> blogList = blogService.findAll();
+    @RequestMapping(value = {"/list/{pageNumber}", "/list"}, method = RequestMethod.GET)
+    public String list(Model model, @PathVariable(required = false) Integer pageNumber){
+        Page<Blog> pageInfo = blogService.findAll(pageNumber);
 
-        model.addAttribute("blogList", blogList);
+        // 한 페이지에  보여야 하는 페이징 버튼 그룹의 개수
+        final int PAGE_BTN_NUM = 10;
+        // 현재 조회중인 페이지 번호 (0부터 세므로 주의)
+        int currentPageNum = pageInfo.getNumber() + 1; // 현재 조회중인 페이지에 강조하기 위해서 필요
+
+        // 현재 조회중인 페이지 그룹의 끝번호
+        int endPageNum = (int)Math.ceil(currentPageNum / (double)PAGE_BTN_NUM) * PAGE_BTN_NUM;
+
+        // 현재 조회중인 페이지 그룹의 시작번호
+        int startPageNum = endPageNum - PAGE_BTN_NUM + 1;
+
+        // 마지막 그룹 번호 보정
+        endPageNum = endPageNum > pageInfo.getTotalPages() ? pageInfo.getTotalPages() : endPageNum;
+
+        model.addAttribute("currentPageNum", currentPageNum);
+        model.addAttribute("endPageNum", endPageNum);
+        model.addAttribute("startPageNum", startPageNum);
+        model.addAttribute("pageInfo", pageInfo);
 
         return "blog/list";
     }
@@ -49,7 +70,9 @@ public class BlogController {
     // 위 방식으로 글 번호를 입력받아, service를 이용해 해당 글 번호 요소만 얻어서
     // 뷰에 적재하는 코드를 아래쪽에 작성해 주세요
     @RequestMapping(value = "/detail/{blogId}", method = RequestMethod.GET)
-    public String detail(Model model, @PathVariable long blogId){ //@PathVariable 주소로 들어오는 값을 메서드 파라미터로 입력
+    public String detail(Model model, @PathVariable long blogId, Principal principal){ //@PathVariable 주소로 들어오는 값을 메서드 파라미터로 입력
+        model.addAttribute("username", principal.getName());
+
         Blog blog = blogService.findById(blogId);
 
         if(blog == null){
@@ -72,7 +95,11 @@ public class BlogController {
     // 대신 폼페이지는 GET 방식으로 접속했을때 연결해주고
     // 폼에서 작성 완료한 내용을 POST방식으로 제출해 저장하도록 만들어줍니다.
     @RequestMapping(value = "/insert", method = RequestMethod.GET)
-    public String insert(){
+    public String insert(Model model, Principal principal){
+        // SecurityContext, Principal 둘다 인증 정보를 가지고 있는 객체 입니다.
+        // 둘 중 편한걸 사용해주시면 됩니다.
+                                                // principal.getName()은 현재 로그인 유저의 아이디를 리턴 합니다
+        model.addAttribute("username", principal.getName());
         // /WEB_INF/views/blog-form.jsp
         return "blog/blog-form";
     }
