@@ -1,6 +1,7 @@
 package com.spring.blog.service;
 
 import com.spring.blog.entity.Blog;
+//import com.spring.blog.entity.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface BlogService {
     void save(Blog blog);
 
     void update(Blog blog);
+
+    void createBlogTable(String loginId);
 }

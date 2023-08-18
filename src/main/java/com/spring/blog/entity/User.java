@@ -31,16 +31,26 @@ public class User implements UserDetails { // UserDetails 의 구현체만 스�
     @Column(nullable = false, unique = true) // 중복 닉네임 불가, 닉네임 지정 필수(unique 요소만 가능)
     private String loginId;
 
+    // oAuth2.0 로그인 사용자의 경우 로그인에 사용한 이메일이 자동으로 닉네임처럼 부여되므로, 다른 닉네임을 쓸 수 있게 하려면 닉네임 필드 필요
+    @Column(unique = true)
+    private String nickname;
+
     // 비밀번호는 Null 허용(OAuth2.0을 활용한 소셜로그인은 비밀번호가 없음)
     private String password;
 
     @Builder                                                    // 인증정보
-    public User(String email, String password, String loginId, String auth){ // 생성자에서 인증 정보를 요구함
+    public User(String email, String password, String loginId, String auth, String nickname){ // 생성자에서 인증 정보를 요구함
         this.email = email;
         this.password = password;
         this.loginId = loginId;
+        this.nickname = nickname;
     }
 
+    // 사용자 닉네임 변경 지원 메서드
+    public User update(String nickname){
+        this.nickname = nickname;
+        return this;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -70,11 +80,10 @@ public class User implements UserDetails { // UserDetails 의 구현체만 스�
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
+    } // 비밀번호가 만료되지 않았으면 true 반환
 
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
+    } // 계정 활성화 여부
 }

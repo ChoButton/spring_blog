@@ -1,6 +1,7 @@
 package com.spring.blog.service;
 
 import com.spring.blog.entity.Blog;
+//import com.spring.blog.entity.User;
 import com.spring.blog.repository.BlogJPARepository;
 import com.spring.blog.repository.BlogRepository;
 import com.spring.blog.repository.ReplyJPARepository;
@@ -82,6 +83,11 @@ public class BlogServiceImpl implements BlogService{
         updatedBlog.setBlogTitle(blog.getBlogTitle());
         updatedBlog.setUpdatedAt(LocalDateTime.now());
         blogJPARepository.save(updatedBlog);
+    }
+
+    @Override
+    public void createBlogTable(String loginId) {
+        blogRepository.createBlogTable(loginId);
     }
 
     public int getCalibratedPageNum(Integer pageNumber){

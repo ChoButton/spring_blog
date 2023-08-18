@@ -3,8 +3,8 @@ package com.spring.blog.controller;
 import com.spring.blog.config.jwt.TokenProvider;
 import com.spring.blog.dto.AccessTokenResponseDTO;
 import com.spring.blog.entity.User;
+import com.spring.blog.service.BlogService;
 import com.spring.blog.service.UsersService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,12 +23,15 @@ public class UserController {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder; // 암호구문 비교를 위해서 추가
 
-    private final TokenProvider tokenProvider; // 로그인 성공자에 대해서 토큰 발급을 위해서 추가
+   private final TokenProvider tokenProvider; // 로그인 성공자에 대해서 토큰 발급을 위해서 추가
 
-    public UserController(UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider tokenProvider){
+    private final BlogService blogService;
+
+    public UserController(UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider tokenProvider, BlogService blogService){
         this.usersService = usersService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenProvider = tokenProvider;
+        this.blogService = blogService;
     }
 
     // Get방식으로 로그인창으로 넘어가는 로직을 작성해 주세요.
@@ -52,6 +55,7 @@ public class UserController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(User user){
         usersService.save(user);
+        blogService.createBlogTable(user.getLoginId());
         return "redirect:/login";
     }
 
@@ -79,6 +83,5 @@ public class UserController {
         }else {
             return ResponseEntity.badRequest().body("login failed"); // 비번이나 아이디 틀리면 로그인 실패
         }
-
     }
 }

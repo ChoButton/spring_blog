@@ -4,7 +4,7 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .jsp
   profiles:
-    active: db,jwt
+    active: db,jwt,oauth2
   datasource:
     url: ${url}
     username: ${username_}
@@ -17,6 +17,14 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${google-client-id}
+            client-secret: ${google-client-secret}
+            scope: profile, email
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/**/**.xml

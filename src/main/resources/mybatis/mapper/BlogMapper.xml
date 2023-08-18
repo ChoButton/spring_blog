@@ -65,7 +65,7 @@
 
     <!-- 테스트를 위한 퀴리문들-->
     <update id="createBlogTable">
-        CREATE TABLE IF NOT EXISTS blog(
+        CREATE TABLE 'blog_id_'${loginId}(
             blog_id INT AUTO_INCREMENT PRIMARY KEY,
             writer VARCHAR(16) NOT NULL,
             blog_title VARCHAR(200) NOT NULL,

@@ -39,3 +39,5 @@ out/
 ### profiles ###
 application-db.yml
 application-jwt.yml
+application-oauth2.yml
+/.metadata/

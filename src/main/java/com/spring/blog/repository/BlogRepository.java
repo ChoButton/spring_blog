@@ -11,7 +11,7 @@ public interface BlogRepository {
 
     // 사전에 정의해야 하는 메서드들
     // 테이블생성
-    void createBlogTable();// 이 메서드 호출시 CREATE TABLE 구문 실행
+    void createBlogTable(String loginId);// 이 메서드 호출시 CREATE TABLE 구문 실행
 
     // 더미데이터 입력
     void insertTestData();// 더미데이터로 3개 row 데이터 입력하기
